@@ -1,0 +1,11 @@
+[Unit]
+Description=Hypr Quiklight Ambilight
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/hypr-quiklight-launcher
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=default.target

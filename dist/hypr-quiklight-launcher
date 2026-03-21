@@ -1,0 +1,91 @@
+#!/bin/sh
+set -eu
+
+BIN="$HOME/.local/bin/hypr-quiklight"
+CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/hypr-quiklight/config.ini"
+
+if [ ! -x "$BIN" ]; then
+  echo "hypr-quiklight launcher: binary not found at $BIN" >&2
+  exit 1
+fi
+
+if [ ! -f "$CONFIG" ]; then
+  echo "hypr-quiklight launcher: config file not found at $CONFIG" >&2
+  exit 1
+fi
+
+OUTPUT=""
+DEVICE=""
+BRIGHTNESS=""
+REVERSE_TOP=""
+REVERSE_RIGHT=""
+REVERSE_LEFT=""
+SWAP_LEFT_RIGHT=""
+TOP_OFFSET=""
+RIGHT_OFFSET=""
+LEFT_OFFSET=""
+IDLE_SLEEP_MS=""
+VERBOSE=""
+VID=""
+PID=""
+SATURATION_BOOST=""
+VALUE_BOOST=""
+GAMMA=""
+MIN_SATURATION=""
+FPS=""
+SMOOTHING=""
+HUE_SHIFT=""
+
+while IFS='=' read -r raw_key raw_value; do
+  key=$(printf '%s' "$raw_key" | sed 's/[[:space:]]//g')
+  value=$(printf '%s' "$raw_value" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
+  case "$key" in
+    ''|'#'*) continue ;;
+    output) OUTPUT="$value" ;;
+    device) DEVICE="$value" ;;
+    brightness) BRIGHTNESS="$value" ;;
+    saturation_boost) SATURATION_BOOST="$value" ;;
+    value_boost) VALUE_BOOST="$value" ;;
+    gamma) GAMMA="$value" ;;
+    min_saturation) MIN_SATURATION="$value" ;;
+    hue_shift) HUE_SHIFT="$value" ;;
+    fps) FPS="$value" ;;
+    smoothing) SMOOTHING="$value" ;;
+    reverse_top) REVERSE_TOP="$value" ;;
+    reverse_right) REVERSE_RIGHT="$value" ;;
+    reverse_left) REVERSE_LEFT="$value" ;;
+    swap_left_right) SWAP_LEFT_RIGHT="$value" ;;
+    top_offset) TOP_OFFSET="$value" ;;
+    right_offset) RIGHT_OFFSET="$value" ;;
+    left_offset) LEFT_OFFSET="$value" ;;
+    idle_sleep_ms) IDLE_SLEEP_MS="$value" ;;
+    verbose) VERBOSE="$value" ;;
+    vid) VID="$value" ;;
+    pid) PID="$value" ;;
+  esac
+done < "$CONFIG"
+
+set --
+[ -n "$OUTPUT" ] && set -- "$@" -o "$OUTPUT"
+[ -n "$DEVICE" ] && set -- "$@" --device "$DEVICE"
+[ -n "$VID" ] && set -- "$@" --vid "$VID"
+[ -n "$PID" ] && set -- "$@" --pid "$PID"
+[ -n "$BRIGHTNESS" ] && set -- "$@" --brightness "$BRIGHTNESS"
+[ -n "$FPS" ] && set -- "$@" --fps "$FPS"
+[ -n "$SMOOTHING" ] && set -- "$@" --smoothing "$SMOOTHING"
+[ -n "$SATURATION_BOOST" ] && set -- "$@" --saturation-boost "$SATURATION_BOOST"
+[ -n "$VALUE_BOOST" ] && set -- "$@" --value-boost "$VALUE_BOOST"
+[ -n "$GAMMA" ] && set -- "$@" --gamma "$GAMMA"
+[ -n "$MIN_SATURATION" ] && set -- "$@" --min-saturation "$MIN_SATURATION"
+[ -n "$HUE_SHIFT" ] && set -- "$@" --hue-shift "$HUE_SHIFT"
+[ -n "$REVERSE_TOP" ] && set -- "$@" --reverse-top "$REVERSE_TOP"
+[ -n "$REVERSE_RIGHT" ] && set -- "$@" --reverse-right "$REVERSE_RIGHT"
+[ -n "$REVERSE_LEFT" ] && set -- "$@" --reverse-left "$REVERSE_LEFT"
+[ -n "$SWAP_LEFT_RIGHT" ] && set -- "$@" --swap-left-right "$SWAP_LEFT_RIGHT"
+[ -n "$TOP_OFFSET" ] && set -- "$@" --top-offset "$TOP_OFFSET"
+[ -n "$RIGHT_OFFSET" ] && set -- "$@" --right-offset "$RIGHT_OFFSET"
+[ -n "$LEFT_OFFSET" ] && set -- "$@" --left-offset "$LEFT_OFFSET"
+[ -n "$IDLE_SLEEP_MS" ] && set -- "$@" --idle-sleep-ms "$IDLE_SLEEP_MS"
+[ "$VERBOSE" = "1" ] && set -- "$@" --verbose
+
+exec "$BIN" "$@"
