@@ -48,6 +48,7 @@ This project is designed for the Quiklight controller identified as:
   - product: `USBHID`
 
 If your controller reports the same HID identity, it should be compatible.
+More HID can work tough, change the vendor & product ID in code to test it.
 
 ---
 
@@ -237,7 +238,7 @@ The user config file is located at:
 ~/.config/hypr-quiklight/config.ini
 ```
 
-Example:
+Example (using Xiaomi Monitor) :
 
 ```ini
 output=Xiaomi
@@ -406,19 +407,19 @@ This mode is useful for:
 You can run the program without the service:
 
 ```bash
-hypr-quiklight -o Xiaomi
+hypr-quiklight -o yourmonitor
 ```
 
 With explicit device path:
 
 ```bash
-hypr-quiklight --device /dev/hidraw0 -o Xiaomi
+hypr-quiklight --device /dev/hidraw0 -o yourmonitor
 ```
 
 With custom color tuning:
 
 ```bash
-hypr-quiklight -o Xiaomi \
+hypr-quiklight -o yourmonitor \
   --saturation-boost 1.70 \
   --value-boost 1.18 \
   --gamma 0.90 \
@@ -557,13 +558,7 @@ The original Quiklight software is built around an Electron-based desktop applic
 
 ## License
 
-Add your preferred license here.
-
-If you publish this project on GitHub, consider including:
-- `MIT`
-- `BSD-2-Clause`
 - `GPL-3.0`
-depending on your preference and upstream compatibility requirements.
 
 ---
 
