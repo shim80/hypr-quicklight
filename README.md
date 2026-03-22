@@ -164,13 +164,13 @@ Test the strip with a static random sequence:
 Test live ambilight manually:
 
 ```bash
-./hypr-quiklight -o Xiaomi
+./hypr-quiklight -o yourmonitor
 ```
 
 Or with an explicit HID path:
 
 ```bash
-./hypr-quiklight --device /dev/hidraw0 -o Xiaomi
+./hypr-quiklight --device /dev/hidraw0 -o yourmonitor
 ```
 
 ---
